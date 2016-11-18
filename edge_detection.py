@@ -40,7 +40,7 @@ block_speed = 5
 1 = stop on edge
 2 = wrap around
 '''
-case = 1
+case = 2
 
 
 # Game loop
@@ -100,9 +100,15 @@ while not done:
     
     elif case == 2:
         ''' if the block is moved completely off of the window, reposition it on the other side '''
-        pass
+        if bottom < 0:
+            block[1] = HEIGHT
+        elif top > HEIGHT:
+            block[1] = 0 - block[3]
 
-
+        if left > WIDTH:
+            block[0] = 0 - block[2]
+        elif right < 0:
+            block[0] = WIDTH
     
     # Drawing code (Describe the picture. It isn't actually drawn yet.)
     screen.fill(BLACK)

@@ -1,6 +1,6 @@
 # Imports
 import pygame
-import math
+import intersects
 
 # Initialize game engine
 pygame.init()
@@ -8,7 +8,7 @@ pygame.init()
 
 # Window
 SIZE = (800, 600)
-TITLE = "Edge Detection"
+TITLE = "Wall Detection"
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption(TITLE)
 
@@ -54,29 +54,40 @@ while not done:
     right = state[pygame.K_RIGHT]
 
     if up:
-        block_v_y = -block_speed
+        block_vy = -block_speed
     elif down:
-        block_v_y = block_speed
+        block_vy = block_speed
     else:
-        block_v_y = 0
+        block_vy = 0
         
     if left:
-        block_v_x = -block_speed
+        block_vx = -block_speed
     elif right:
-        block_v_x = block_speed
+        block_vx = block_speed
     else:
-        block_v_x = 0
+        block_vx = 0
 
         
     # Game logic (Check for collisions, update points, etc.)
-    ''' move the block '''
-    block[0] += block_v_x
-    block[1] += block_v_y
+    ''' move the block in horizontal direction '''
+    block[0] += block_vx
 
+    ''' resolve collision '''
+    if intersects.rect_rect(block, wall):
+        if block_vx > 0:
+            block[0] = wall[0] - block[2]
+        elif block_vx < 0:
+            block[0] = wall[0] + wall[2]
 
-
-
-
+    ''' move the block in vertical direction '''
+    block[1] += block_vy
+    
+    ''' resolve collision '''
+    if intersects.rect_rect(block, wall):
+        if block_vy > 0:
+            block[1] = wall[1] - block[3]
+        elif block_vy < 0:
+            block[1] = wall[1] + wall[3]
 
 
     
